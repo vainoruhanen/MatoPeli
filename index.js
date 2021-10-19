@@ -15,7 +15,6 @@ let yV = 0;
 
 var omenat = []; //array omenoille / ruoille
 
-
 document.addEventListener("keydown", keyDownHandler, false);
 
 function keyDownHandler(e) {
@@ -68,7 +67,6 @@ function checkApple() {
   }
 }
 
-
 function osuukoReunaan(){
   if(hX < 0 || hX >= 20 || hY >= 20 || hY < 0){ //jos menee osuu reunaan/ menee yli
     console.log("game over bish"); //tänne varmaan jossain vaiheessa joku gamover() tai vastaava funktio
@@ -95,8 +93,6 @@ class Ruoka{
         ctx.fill(); 
     }
 }
-
-
 
 function luoOmena(){ //Luo omenan/ruoan
   aY = Math.floor(Math.random() * area);
