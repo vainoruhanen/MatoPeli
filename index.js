@@ -1,19 +1,28 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
-let speed = 7; //voi säätää madon/"pelin" nopeutta
 
-
-
-let area = 20;
+let speed = 7; 
+let area = 20; // voit säätää pelin "asetuksia"
 let tiles = canvas.width / area-2;
+
 let hX = 10; // madon pään aloituspaikka  
 let hY = 10; // saattaa olla hieman epäselvää kun lyhennän asioit
-let aX = 0;
+let aX = 0; //omenoiden koordinaatit
 let aY = 0;
 let xV = 0; // v=velocity 
 let yV = 0;
 
-var omenat = []; //array omenoille / ruoille
+var ennatysPisteet = 0;
+var omenat = []; //array omenoille
+var parts = [];
+let length = 2;
+
+class Part{
+  constructor(x,y){
+    this.x=x;
+    this.y=y;
+  }
+}
 
 document.addEventListener("keydown", keyDownHandler, false);
 
@@ -40,6 +49,10 @@ function keyDownHandler(e) {
 function Draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   Move();
+  let result = gameOver();
+  if(result){
+    gameOver();
+  }
   checkApple();
   drawOmena();
   drawSnake();
@@ -47,11 +60,16 @@ function Draw() {
 }
 
 function drawSnake() {
-  ctx.beginPath();
-  ctx.rect(hX*area, hY*area, tiles,tiles)
+  ctx.fillStyle = '#808080'
+  for(let i=0; i<parts.length; i++){
+    let part = parts[i]
+    ctx.fillRect(part.x*area, part.y*area, tiles,tiles)
+  } parts.push(new Part(hX, hY)); //
+    if(parts.length>length){
+      parts.shift(); //poistaa hännän viimeisimmän osan kun pituus on suurempi kuin sen pitäisi olla
+    }
   ctx.fillStyle = '#ffffff'
-  ctx.fill();
-  ctx.closePath();
+  ctx.fillRect(hX*area, hY*area, tiles,tiles)
 }
 
 function Move() {
@@ -64,13 +82,50 @@ function checkApple() {
     var score = omenat.length; // laskee pisteet nyt
     document.getElementById("score").innerHTML = score;
     luoOmena()
+    length++;
+
+    if(score>5) {
+      speed=9;
+    } else if(score>10){
+      speed=11;
+    }
   }
 }
 
-function osuukoReunaan(){
-  if(hX < 0 || hX >= 20 || hY >= 20 || hY < 0){ //jos menee osuu reunaan/ menee yli
-    console.log("game over bish"); //tänne varmaan jossain vaiheessa joku gamover() tai vastaava funktio
+function gameOver(){
+  let gOver = false;
+  if(yV===0 && xV===0){return false;}
+
+  if(hX < 0 || hX === 20 || hY === 20 || hY < 0){ //jos menee osuu reunaan/ menee yli
+    gOver = true; 
   }
+    for(let i=0; i<parts.length; i++){
+      let p = parts[i];                 //ei voi osua itseensä
+      if(p.x===hX && p.y===hY){
+        gOver = true;
+        break;
+      }
+    }
+
+  if(gOver){
+    hX = 10;
+    hY = 10;
+    xV = 0;   
+    yV = 0;  //resetoi koordinaatit, nopeuden jne
+    length = 2;
+    speed = 7;
+    parts = [];
+    if(omenat.length > ennatysPisteet){
+      ennatysPisteet = omenat.length - 1; 
+    }
+ 
+    omenat = [];          //nollaa pisteet/pelin
+    var score = omenat.length;
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("ennatys").innerHTML = ennatysPisteet;
+    luoOmena();
+  }
+  return gOver;
 }
 
 
@@ -78,20 +133,20 @@ function osuukoReunaan(){
 
 
 class Ruoka{
-    constructor(x, y){
-        this.x = x;
-        this.y = y;
-        this.width = 18;
-        this.height = 18;
-    }
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+    this.width = 18;
+    this.height = 18;
+  }
 
-    draw(){     //piirtää omenan/ruoan näytölle
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.beginPath();
-        ctx.rect(this.x*area, this.y*area, tiles,tiles); 
-        ctx.fillStyle = "#FF0000";
-        ctx.fill(); 
-    }
+  draw(){     //piirtää omenan/ruoan näytölle
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.rect(this.x*area, this.y*area, tiles,tiles); 
+    ctx.fillStyle = "#FF0000";
+    ctx.fill(); 
+  }
 }
 
 function luoOmena(){ //Luo omenan/ruoan
@@ -102,12 +157,10 @@ function luoOmena(){ //Luo omenan/ruoan
 }
 
 function drawOmena(){
-    omenat.forEach((omena) =>{
-        omena.draw();
-    })
-    
+  omenat.forEach((omena) =>{
+    omena.draw();
+  })
 }
-
 
 Draw();
 luoOmena();
