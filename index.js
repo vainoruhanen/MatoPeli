@@ -88,6 +88,7 @@ function checkApple() {
 
 function gameOver(){
   let gOver = false;
+  let restart = false;
   if(yV===0 && xV===0){return false;}
 
   if(hX < 0 || hX === 20 || hY === 20 || hY < 0){ //jos menee osuu reunaan/ menee yli
@@ -101,24 +102,10 @@ function gameOver(){
       }
     }
 
-  if(gOver){
-    hX = 10;
-    hY = 10;
-    xV = 0;   
-    yV = 0;  //resetoi koordinaatit, nopeuden jne
-    length = 2;
-    speed = 7;
-    parts = [];
-    if(omenat.length > ennatysPisteet){
-      ennatysPisteet = omenat.length - 1; 
+    if(gOver){
+      drawRestart();
+      speed = 0;
     }
- 
-    omenat = [];          //nollaa pisteet/pelin
-    var score = omenat.length;
-    document.getElementById("score").innerHTML = score;
-    document.getElementById("ennatys").innerHTML = ennatysPisteet;
-    luoOmena();
-  }
   return gOver;
 }
 
@@ -158,6 +145,34 @@ function drawOmena(){
   omenat.forEach((omena) =>{
     omena.draw();
   })
+}
+
+function hideRestart(){
+  document.getElementById("restart-nakyma").style.display = "none";             //piilotta restart div elementin
+}
+
+function drawRestart(){
+  document.getElementById("restart-nakyma").style.display = "block";
+}
+
+function restartGame(){   //funktio kutsutaan käyttäjän painaessa restart
+  hideRestart();
+  hX = 10;
+  hY = 10;
+  xV = 0;   
+  yV = 0;  //resetoi koordinaatit, nopeuden jne
+  length = 2;
+  speed = 7;
+  parts = [];
+  if(omenat.length > ennatysPisteet){
+    ennatysPisteet = omenat.length - 1; 
+  }
+
+  omenat = [];          //nollaa pisteet/pelin
+  var score = omenat.length;
+  document.getElementById("score").innerHTML = score;
+  document.getElementById("ennatys").innerHTML = ennatysPisteet;
+  luoOmena();
 }
 
 Draw();
