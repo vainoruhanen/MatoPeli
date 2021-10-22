@@ -25,7 +25,6 @@ class Part{
 }
 
 document.addEventListener("keydown", keyDownHandler, false);
-
 function keyDownHandler(e) {
   if(e.key == "w") {
     if(yV==1) return;
@@ -50,9 +49,7 @@ function Draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   Move();
   let result = gameOver();
-  if(result){
-    gameOver();
-  }
+  if(result){gameOver();}
   checkApple();
   drawOmena();
   drawSnake();
@@ -65,9 +62,7 @@ function drawSnake() {
     let part = parts[i]
     ctx.fillRect(part.x*area, part.y*area, tiles,tiles)
   } parts.push(new Part(hX, hY)); //
-    if(parts.length>length){
-      parts.shift(); //poistaa hännän viimeisimmän osan kun pituus on suurempi kuin sen pitäisi olla
-    }
+    if(parts.length>length){parts.shift();} //poistaa hännän viimeisimmän osan kun pituus on suurempi kuin sen pitäisi olla
   ctx.fillStyle = '#ffffff'
   ctx.fillRect(hX*area, hY*area, tiles,tiles)
 }
@@ -84,11 +79,10 @@ function checkApple() {
     luoOmena()
     length++;
 
-    if(score>5) {
-      speed=9;
-    } else if(score>10){
-      speed=11;
-    }
+    if(score>5) {speed=9;}
+    if(score>10){speed=11;}
+    if(score>15){speed=13;}
+    if(score>20){speed=15;}
   }
 }
 
@@ -152,6 +146,10 @@ class Ruoka{
 function luoOmena(){ //Luo omenan/ruoan
   aY = Math.floor(Math.random() * area);
   aX = Math.floor(Math.random() * area);
+  for (let i = 0; i < parts.length; i++) {
+    let p = parts[i];                 //toimii sillein että omena ei spawnaa madon sisälle
+    if (p.x === aX && p.y === aY) {luoOmena();}
+  }
   const ruoka = new Ruoka(aX, aY);
   omenat.push(ruoka); //lisää luodun omenan omenat arrayhin
 }
