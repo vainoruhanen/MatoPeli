@@ -26,19 +26,19 @@ class Part{
 
 document.addEventListener("keydown", keyDownHandler, false);
 function keyDownHandler(e) {
-  if(e.key == "w") {
+  if(e.key == "w" || e.key == "W") {
     if(yV==1) return;
       yV=-1;
       xV=0;
-  } if(e.key == "a") {
+  } if(e.key == "a" || e.key == "A") {
       if(xV==1) return;
         yV=0;
         xV=-1;
-    } if(e.key == "s") {
+    } if(e.key == "s" || e.key == "S") {
         if(yV==-1) return;
           yV=1;
           xV=0;
-      } if(e.key == "d") {
+      } if(e.key == "d" || e.key == "D") {
           if(xV==-1) return;
             yV=0;
             xV=1;
