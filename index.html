@@ -15,15 +15,46 @@
       font-size: 20px;
       font-weight: bold;
       font-family: Arial, Helvetica, sans-serif;
+    } .stuff {position: absolute;}
+
+    .restart-nakyma{
+      user-select: none;
+      transform: translateX(-30%);
+      font-size: 1.5em;
+      text-align: center;
+      position: absolute;
+      left: 40%;
+      top: 40%;
+      background-color: red;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 20px;
+      padding-top: 20px;
+      border-radius: 10px;
     }
-    .stuff {position: absolute;}
+    .restart{
+      background-color: greenyellow;
+      cursor: pointer;
+    }
+    .restart:hover{
+      background-color: aqua;
+    }
+    .gameover{
+      padding-bottom: 5px;
+    }
+
   </style>
   <div id="stuff">
     Ennätys: <span id="ennatys">0</span><br>
     Pisteet: <span id="score">0</span>
   </div>
 </head>
-<body>
+<body onload="hideRestart()">
+  <div id="restart-nakyma" class="restart-nakyma">
+    <div class="gameover">Game Over!</div>
+    <div onclick="restartGame()" class="restart">Restart</div>
+  </div>
+
   <canvas id="game" width="400" height="400"/>
   <script src="index.js"></script>
 </body>
