@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");
 let speed = 7; 
 let area = 20; // voit säätää pelin "asetuksia"
 let tiles = canvas.width / area-2;
+let length = 2;
 
 let hX = 10; // madon pään aloituspaikka  
 let hY = 10; // saattaa olla hieman epäselvää kun lyhennän asioit
@@ -12,10 +13,11 @@ let aY = 0;
 let xV = 0; // v=velocity 
 let yV = 0;
 
+var hit = new Audio('hit.mp3');
+var gOver = false;
 var ennatysPisteet = 0;
 var omenat = []; //array omenoille
 var parts = [];
-let length = 2;
 
 class Part{
   constructor(x,y){
@@ -23,7 +25,6 @@ class Part{
     this.y=y;
   }
 }
-testi
 
 document.addEventListener("keydown", keyDownHandler, false);
 function keyDownHandler(e) {
@@ -43,6 +44,8 @@ function keyDownHandler(e) {
           if(xV==-1) return;
             yV=0;
             xV=1;
+        } if(gOver){
+          return; 
         }
 }
 
@@ -75,6 +78,8 @@ function Move() {
 
 function checkApple() {
   if(aX===hX && aY===hY) {
+    var audio = new Audio('eat.mp3');
+    audio.play();
     var score = omenat.length; // laskee pisteet nyt
     document.getElementById("score").innerHTML = score;
     luoOmena()
@@ -88,24 +93,27 @@ function checkApple() {
 }
 
 function gameOver(){
-  let gOver = false;
-  let restart = false;
   if(yV===0 && xV===0){return false;}
 
   if(hX < 0 || hX === 20 || hY === 20 || hY < 0){ //jos menee osuu reunaan/ menee yli
-    gOver = true; 
+    gOver = true;
+    hit.play()
   }
     for(let i=0; i<parts.length; i++){
       let p = parts[i];                 //ei voi osua itseensä
       if(p.x===hX && p.y===hY){
         gOver = true;
+        hit.play()
         break;
       }
     }
 
     if(gOver){
+      hX = 10;
+      hY = 10;
+      xV = 0;   
+      yV = 0;
       drawRestart();
-      speed = 0;
     }
   return gOver;
 }
@@ -158,13 +166,10 @@ function drawRestart(){
 
 function restartGame(){   //funktio kutsutaan käyttäjän painaessa restart
   hideRestart();
-  hX = 10;
-  hY = 10;
-  xV = 0;   
-  yV = 0;  //resetoi koordinaatit, nopeuden jne
-  length = 2;
+  length = 2; //resetoi koordinaatit, nopeuden jne
   speed = 7;
   parts = [];
+  gOver = false;
   if(omenat.length > ennatysPisteet){
     ennatysPisteet = omenat.length - 1; 
   }
