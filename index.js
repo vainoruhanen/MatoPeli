@@ -183,3 +183,7 @@ luoOmena();
 function luoEste(){
   //luo esteen
 }
+
+function piirraEste(){
+  
+}
