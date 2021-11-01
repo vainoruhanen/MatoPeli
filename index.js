@@ -23,6 +23,7 @@ class Part{
     this.y=y;
   }
 }
+testi
 
 document.addEventListener("keydown", keyDownHandler, false);
 function keyDownHandler(e) {
