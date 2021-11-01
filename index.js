@@ -178,3 +178,8 @@ function restartGame(){   //funktio kutsutaan käyttäjän painaessa restart
 
 Draw();
 luoOmena();
+
+
+function luoEste(){
+  //luo esteen
+}
