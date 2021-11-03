@@ -12,13 +12,17 @@ let aX = 0; //omenoiden koordinaatit
 let aY = 0;
 let xV = 0; // v=velocity 
 let yV = 0;
+let esteX = 18;
+let esteY = 18;
+
+let applesEaten = 0;
 
 var hit = new Audio('hit.mp3');
 var gOver = false;
 var ennatysPisteet = 0;
 var omenat = []; //array omenoille
 var parts = [];
-
+var esteet = []; //
 class Part{
   constructor(x,y){
     this.x=x;
@@ -54,9 +58,11 @@ function Draw() {
   Move();
   let result = gameOver();
   if(result){gameOver();}
+  drawEste();
   checkApple();
   drawOmena();
   drawSnake();
+
   setTimeout(Draw, 1000 / speed);
 }
 
@@ -78,6 +84,11 @@ function Move() {
 
 function checkApple() {
   if(aX===hX && aY===hY) {
+    applesEaten++;
+    if(applesEaten >= 3){   // uusi este joka kolmannen syöden omenan jälkeen
+      applesEaten = 0;
+      luoEste();
+    }
     var audio = new Audio('eat.mp3');
     audio.play();
     var score = omenat.length; // laskee pisteet nyt
@@ -132,6 +143,7 @@ class Ruoka{
 
   draw(){     //piirtää omenan/ruoan näytölle
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawEste();
     ctx.beginPath();
     ctx.rect(this.x*area, this.y*area, tiles,tiles); 
     ctx.fillStyle = "#FF0000";
@@ -183,12 +195,17 @@ function restartGame(){   //funktio kutsutaan käyttäjän painaessa restart
 
 Draw();
 luoOmena();
-
+luoEste();
 
 function luoEste(){
-  //luo esteen
+  esteY = Math.floor(Math.random() * area);         //if pisteitä > 20    esteitä 2 tai jtn vastaavaa
+  esteX = Math.floor(Math.random() * area);               //vielä se että ei spawnaa omenan tai madon sisälle                                                        //kenties sillei että pitää olla tietty etäisyys madon päästä
 }
 
-function piirraEste(){
+function drawEste(){ 
+  ctx.beginPath();
+  ctx.fillStyle = "#FF8C00";
+  ctx.rect(esteX*area, esteY*area, tiles, tiles);
+  ctx.fill();
   
 }
