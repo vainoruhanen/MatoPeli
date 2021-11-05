@@ -84,7 +84,7 @@ function Move() {
 
 function checkApple() {
   if(aX===hX && aY===hY) {
-    applesEaten++;
+    applesEaten++; 
     if(applesEaten >= 3){   // uusi este joka kolmannen syöden omenan jälkeen
       applesEaten = 0;
       luoEste();
@@ -106,7 +106,7 @@ function checkApple() {
 function gameOver(){
   if(yV===0 && xV===0){return false;}
 
-  if(hX < 0 || hX === 20 || hY === 20 || hY < 0){ //jos menee osuu reunaan/ menee yli
+  if(hX < 0 || hX === 20 || hY === 20 || hY < 0 || esteX === hX && esteY === hY){ //jos menee osuu reunaan/ menee yli / osuu esteeseen
     gOver = true;
     hit.play()
   }
@@ -125,6 +125,8 @@ function gameOver(){
       xV = 0;   
       yV = 0;
       drawRestart();
+      applesEaten = 0;
+      luoEste();
     }
   return gOver;
 }
@@ -198,8 +200,8 @@ luoOmena();
 luoEste();
 
 function luoEste(){
-  esteY = Math.floor(Math.random() * area);         //if pisteitä > 20    esteitä 2 tai jtn vastaavaa
-  esteX = Math.floor(Math.random() * area);               //vielä se että ei spawnaa omenan tai madon sisälle                                                        //kenties sillei että pitää olla tietty etäisyys madon päästä
+  esteY = Math.floor(Math.random() * area);
+  esteX = Math.floor(Math.random() * area);              
 }
 
 function drawEste(){ 
@@ -207,5 +209,5 @@ function drawEste(){
   ctx.fillStyle = "#FF8C00";
   ctx.rect(esteX*area, esteY*area, tiles, tiles);
   ctx.fill();
-  
 }
+
