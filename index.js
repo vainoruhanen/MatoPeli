@@ -201,7 +201,12 @@ luoEste();
 
 function luoEste(){
   esteY = Math.floor(Math.random() * area);
-  esteX = Math.floor(Math.random() * area);              
+  esteX = Math.floor(Math.random() * area); 
+  
+  if((esteY === aY && esteX === aX) || esteX === hX && esteX === hY){
+    console.log("kiguls");
+      luoEste();                                                //toimii sillee että este ei spawnaa madon pään sisälle tai omenan sisälle
+  }
 }
 
 function drawEste(){ 
